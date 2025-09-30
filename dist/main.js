@@ -11,7 +11,7 @@ const main = async () => {
     const app = (0, express_1.default)();
     app.use(express_1.default.json()); // habilita parsing de JSON
     app.use(metricsRoutes_1.default); // importa suas rotas
-    const PORT = process.env.PORT || 3000;
+    const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
     app.listen(PORT, "0.0.0.0", () => {
         console.log(`escutando na porta ${PORT}`);
     });

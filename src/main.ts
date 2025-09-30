@@ -11,7 +11,7 @@ const main = async () => {
   
   app.use(metricsRouters); // importa suas rotas
 
-  const PORT = process.env.PORT || 3000;
+  const PORT: number = process.env.PORT ? Number(process.env.PORT) : 3000;
   app.listen(PORT, "0.0.0.0",() => {
     console.log(`escutando na porta ${PORT}`);
   });

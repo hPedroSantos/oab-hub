@@ -1,7 +1,7 @@
 export interface IAcurracyRepository {
-    getAcurracy(id): Promise<String>
+    getAcurracy(id: any): Promise<String>
 }
 
 export interface IGetGroupQuestsRepository {
-    getGroupQuests(id): Promise<String>
+    getGroupQuests(id: any): Promise<String>
 }

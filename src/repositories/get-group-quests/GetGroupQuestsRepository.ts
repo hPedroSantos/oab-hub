@@ -2,7 +2,7 @@ import prisma from "../../database/mariadb";
 import { IGetGroupQuestsRepository } from "../IMetricsRepository";
 
 export class GetGroupQuestsRepository implements IGetGroupQuestsRepository {
-    async getGroupQuests(disciplinas: string[]): Promise<any> {
+    async getGroupQuests(disciplinas: string[]): Promise<String | any> {
         try {
             if (!disciplinas || disciplinas.length === 0) {
                 throw new Error("É necessário selecionar ao menos uma disciplina.");
