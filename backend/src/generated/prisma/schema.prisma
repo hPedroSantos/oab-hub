@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model questoes {
+  id_questoes        Int                  @id @default(autoincrement())
+  texto              String               @db.LongText
+  alternativas       String               @db.LongText
+  gabarito           String               @db.LongText
+  disciplina         String?              @db.VarChar(255)
+  respostas_simulado respostas_simulado[]
+}
+
+model respostas_simulado {
+  id_resposta       Int              @id @default(autoincrement())
+  id_simulado_feito Int
+  id_questao        Int
+  acertou           Boolean
+  questoes          questoes         @relation(fields: [id_questao], references: [id_questoes], onDelete: Cascade, map: "fk_questao")
+  simulados_feitos  simulados_feitos @relation(fields: [id_simulado_feito], references: [id_simulados_feitos], onDelete: Cascade, map: "fk_simulado_feito")
+
+  @@index([id_questao], map: "id_questao")
+  @@index([id_simulado_feito], map: "id_simulado_feito")
+}
+
+model resultados_por_disciplina {
+  id_resultado_disciplina    Int              @id @default(autoincrement())
+  id_simulado_feito          Int
+  disciplina                 String           @db.VarChar(50)
+  acertos_disciplina         Int
+  questoes_feitas_disciplina Int
+  simulados_feitos           simulados_feitos @relation(fields: [id_simulado_feito], references: [id_simulados_feitos], onDelete: Cascade, map: "fk_simulado")
+
+  @@index([id_simulado_feito], map: "fk_simulado")
+}
+
+model simulados_feitos {
+  id_simulados_feitos       Int                         @id @default(autoincrement())
+  id_usuario                String                      @db.Char(36)
+  data_simulado             DateTime                    @db.Date
+  acertos_totais            Int
+  questoes_feitas_totais    Int
+  tempo_gasto               DateTime                    @db.Time(0)
+  respostas_simulado        respostas_simulado[]
+  resultados_por_disciplina resultados_por_disciplina[]
+
+  @@index([id_usuario], map: "fk_usuario_simulados")
+}
+
+/// Mantemos o modelo usuarios apenas como referência, sem PK para não quebrar Prisma
+model usuarios {
+  uuid_usuario String @db.Char(36)
+  nome         String @db.VarChar(10)
+  sobrenome    String @db.VarChar(10)
+  idade        Int
+  email        String @db.VarChar(25)
+  sexo         String @db.VarChar(10)
+
+  @@ignore
+}
